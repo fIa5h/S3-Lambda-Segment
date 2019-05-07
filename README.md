@@ -84,7 +84,7 @@ The deployment package is a .zip file containing your Lambda function code and d
 -   Install all dependencies
     
     ```
-    yarn init
+    yarn
     ```
     or if you are using npm
     ```
