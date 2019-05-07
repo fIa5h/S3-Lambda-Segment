@@ -12,6 +12,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "build": "zip -r function.zip .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

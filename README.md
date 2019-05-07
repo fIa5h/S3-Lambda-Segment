@@ -91,6 +91,15 @@ The deployment package is a .zip file containing your Lambda function code and d
     npm install
     ```
 
+-   Build the zip bundle that you will upload into AWS Lambda?
+    ```
+    yarn build
+    ```
+    or if you are using npm
+    ```
+    npm run build
+    ```
+
 **To create the function**
 
 -   Create a Lambda function with the  `create-function`  command.
