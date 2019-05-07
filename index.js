@@ -1,13 +1,12 @@
 // dependencies
 var async = require('async');
 var AWS = require('aws-sdk');
-var util = require('util');
 // csvtojson quickly and easily parses and formats our CSV files
 var csv = require('csvtojson');
 // the following are Segment libraries
 var Analytics = require('analytics-node');
 var Objects = require('objects-node');
-//
+
 var analytics = new Analytics(process.env.write_key);
 var objects = new Objects(process.env.write_key);
 var s3 = new AWS.S3();
@@ -36,7 +35,6 @@ exports.handler = function(event, context, callback) {
         function transform(response, next) {
             //console.log("transform");
             var csvString = response.Body.toString();
-            var formattedResults = [];
             // In colParser we ensure that our timestamps aren't strings, Segment APIs don't like strings here
             csv({
             	colParser:{

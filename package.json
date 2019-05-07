@@ -1,0 +1,27 @@
+{
+  "name": "s3-lambda-segment",
+  "version": "1.0.0",
+  "description": "--- Segment customers may have sources of data where Segment’s SDKs cannot be instrumented, including other SaaS tools for which Segment does not have a readily available turn-key connector. In many of these cases, you may extract data from these sources in the form of CSV files, and then leverage our server-side SDKs or HTTP tracking api to push the records into Segment.",
+  "main": "index.js",
+  "dependencies": {
+    "analytics-node": "^3.3.0",
+    "async": "^2.6.2",
+    "aws-sdk": "^2.451.0",
+    "csvtojson": "^2.0.8",
+    "objects-node": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyanThomasMusser/S3-Lambda-Segment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyanThomasMusser/S3-Lambda-Segment/issues"
+  },
+  "homepage": "https://github.com/RyanThomasMusser/S3-Lambda-Segment#readme"
+}
