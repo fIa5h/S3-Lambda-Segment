@@ -1,0 +1,5 @@
+userId,name,traits.email,traits.company,traits.createdAt,context.ip,context.device.id,timestamp
+1,Tyler Ortiz,fake@facebook.com,Facebook,2019-03-02T17:12:27.940Z,175.154.50.123,1,2019-05-07T19:32:27.940Z
+2,Jacob Johnson,fake@twitter.com,Twitter,2019-03-02T17:12:27.940Z,40.110.228.56,2,2019-05-07T19:32:27.940Z
+3,Ally Sweeney,fake@instagram.com,Instagram,2019-03-02T17:12:27.940Z,175.155.243.133,3,2019-05-07T19:32:27.940Z
+4,Jasmin Christian,fake@pinterest.com,Pinterest,2019-03-02T17:12:27.940Z,112.252.20.73,4,2019-05-07T19:32:27.940Z

@@ -1,0 +1,5 @@
+userId,name,event,properties.plan,properties.accountType,context.ip,context.device.id,timestamp
+1,Tyler Ortiz,dummy event,bronze,Facebook,175.154.50.123,1,2019-05-07T19:32:27.940Z
+2,Jacob Johnson,dummy event,silver,Twitter,40.110.228.56,2,2019-05-07T19:32:27.940Z
+3,Ally Sweeney,dummy event,gold,Instagram,175.155.243.133,3,2019-05-07T19:32:27.940Z
+4,Jasmin Christian,dummy event,platinum,Pinterest,112.252.20.73,4,2019-05-07T19:32:27.940Z
