@@ -91,7 +91,7 @@ The deployment package is a .zip file containing your Lambda function code and d
     npm install
     ```
 
--   Build the zip bundle that you will upload into AWS Lambda?
+-   Build the zip bundle that you will upload into AWS Lambda
     ```
     yarn build
     ```
