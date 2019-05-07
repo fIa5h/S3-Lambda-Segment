@@ -81,6 +81,16 @@ The deployment package is a .zip file containing your Lambda function code and d
 
 	`git clone https://github.com/RyanThomasMusser/S3-Lambda-Segment.git`
 
+-   Install all dependencies
+    
+    ```
+    yarn init
+    ```
+    or if you are using npm
+    ```
+    npm install
+    ```
+
 **To create the function**
 
 -   Create a Lambda function with the  `create-function`  command.
