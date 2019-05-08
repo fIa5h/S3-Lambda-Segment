@@ -49,16 +49,16 @@ Create the  [execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda
     -   **Role name**  –  **`lambda-s3-role`**.
         
 
-The  **AWSLambdaExecute**  policy has the permissions that the function needs to manage objects in Amazon S3 and write logs to CloudWatch Logs.
+**Please note the newly created IAM role id, we will need it later**! The  **AWSLambdaExecute**  policy has the permissions that the function needs to manage objects in Amazon S3 and write logs to CloudWatch Logs.
 ### Create Buckets and Upload a Sample Object
 
 Follow the steps to create buckets and upload an object.
 
 1.  Open the Amazon S3 console.
     
-2.  Create your bucket. Consider using the name `S3-Lambda-Segment` - we will use this name throughout the tutorial to refer to our function.
+2.  Create your bucket. **Please note your bucket name, we will need it later**!
     
-3.  In the source bucket, upload a dummy .csv object,  `track_1.csv`. You can find a sample `track_1.csv` file in this repository.
+3.  In the source bucket, upload a dummy .csv object, `track_1.csv`. You can find a sample `track_1.csv` file in this repository.
     
     When you invoke the Lambda function manually before you connect to Amazon S3, you pass sample event data to the function that specifies the source bucket and  `track_1.csv`  as the newly created object so you need to create this sample object first. You can find a sample `track_1.csv` included in this repository.
 
@@ -79,9 +79,11 @@ The deployment package is a .zip file containing your Lambda function code and d
 **To create a deployment package**
 -   Clone this repository to your local machine - the repository contains a pre-zipped deployment package.
 
-	`git clone https://github.com/RyanThomasMusser/S3-Lambda-Segment.git`
+	```
+	git clone https://github.com/RyanThomasMusser/S3-Lambda-Segment.git
+	```
 
--   Install all dependencies
+-   Install dependencies
     ```
     npm install
     ```
@@ -90,12 +92,16 @@ The deployment package is a .zip file containing your Lambda function code and d
 
 -   Upload the Lambda function using the following:
     
-    `$ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleId <THE IAM ROLE ID>`
+    ```
+    $ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleId <THE IAM ROLE ID>
+    ```
     
 
-The preceding command sets a 60-second timeout value as the function configuration. Depending on the size of objects you upload, you might need to increase the timeout value using the following AWS CLI command.
+**Please note your Lambda function's name and region, we will need them later**. The preceding command sets a 60-second timeout value as the function configuration. Depending on the size of objects you upload, you might need to increase the timeout value using the following AWS CLI command.
 
-``$ aws lambda update-function-configuration --function-name <YOUR LAMBDA NAME> --timeout 90``
+```
+$ aws lambda update-function-configuration --function-name <YOUR LAMBDA NAME> --timeout 90
+```
 
 ### Test the Lambda Function
 
@@ -105,7 +111,9 @@ In this step, you invoke the Lambda function manually using sample Amazon S3 eve
 
 1.  The command below use our previously created `track_1.csv` file that we've uploaded to S3 as our data source, simulate that `track_1.csv` was uploaded, and manually trigger our lambda function: 
     
-    ``$ node quickCommands.js --lambdaTest --lambdaName <YOUR LAMBDA NAME> --region <THE AWS REGION> --bucketName <YOUR S3 BUCKET NAME>``
+    ```
+    $ node quickCommands.js --lambdaTest --lambdaName <YOUR LAMBDA NAME> --region <THE AWS REGION> --bucketName <YOUR S3 BUCKET NAME>
+    ```
     
 3.  Verify execution in your Cloudwatch logs.
 
@@ -132,11 +140,15 @@ In this step, you add the remaining configuration so that Amazon S3 can publish 
     -   The bucket is owned by a specific AWS account. If a bucket owner deletes a bucket, some other AWS account can create a bucket with the same name. This condition ensures that only a specific AWS account can invoke your Lambda function.
         
     
-    ``$ node quickCommands.js --lambdaPermissionsSet --lambdaName <YOUR LAMBDA NAME> --bucketOwnerAccountId <AWS BUCKET OWNER ACCOUNT ID> --bucketName <YOUR S3 BUCKET NAME>``
+    ```
+    $ node quickCommands.js --lambdaPermissionsSet --lambdaName <YOUR LAMBDA NAME> --bucketOwnerAccountId <AWS BUCKET OWNER ACCOUNT ID> --bucketName <YOUR S3 BUCKET NAME>
+    ```
     
 2. Then, you can verify the function's access policy by running the following command:
     
-    ```node quickCommands.js --lambdaPermissionsView --lambdaName <YOUR LAMBDA NAME>```
+    ```
+    node quickCommands.js --lambdaPermissionsView --lambdaName <YOUR LAMBDA NAME>
+    ```
     
 Add notification configuration on the source bucket to request Amazon S3 to publish object-created events to Lambda.
 
