@@ -10,15 +10,16 @@ program
   .option('--lambdaName [string]', 'lambdaName')
   .option('--region [string]', 'region')
   .option('--bucketName [string]', 'bucketName')
-  .option('--bucketOwnerAccountId [int]', 'bucketOwnerAccountId');
+  .option('--bucketOwnerAccountId [int]', 'bucketOwnerAccountId')
+  .option('--segmentWriteKey [string]', 'segmentWriteKey');
 
 program.parse(process.argv);
 
 if (program.lambdaUpload){
-  if(!program.lambdaName || !program.roleId){
-    console.error('Error! Please include --lambdaName and --roleId');
+  if(!program.lambdaName || !program.roleId || !program.segmentWriteKey){
+    console.error('Error! Please include --lambdaName, --segmentWriteKey and --roleId');
   }else{
-    exec(`S3-Lambda-Segment$ aws lambda create-function --function-name `+program.lambdaName+` --zip-file fileb://function.zip --handler index.handler --runtime nodejs8.10 --timeout 60 --memory-size 1024 --role arn:aws:iam::`+program.roleId+`:role/lambda-s3-role`, function (error, stdOut, stdErr) {
+    exec(`S3-Lambda-Segment$ aws lambda create-function --function-name `+program.lambdaName+` --zip-file fileb://function.zip --handler index.handler --runtime nodejs8.10 --timeout 60 --memory-size 1024 --role arn:aws:iam::`+program.roleId+`:role/lambda-s3-role `+`--environment Variables={write_key=`+program.segmentWriteKey+`}`, function (error, stdOut, stdErr) {
       if(error) console.log(error);
       if(stdOut) console.log(stdOut);
       if(stdErr) console.log(stdErr);
