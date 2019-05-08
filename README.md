@@ -93,7 +93,7 @@ The deployment package is a .zip file containing your Lambda function code and d
 -   Upload the Lambda function using the following:
     
     ```
-    $ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleARN <THE IAM ROLE ARN, example: arn:aws:iam::262705970317:role/lambda-s3-role>
+    $ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleARN <THE IAM ROLE ARN, example: arn:aws:iam::262705970317:role/lambda-s3-role> --segmentWriteKey <YOUR SEGMENT WRITE KEY>
     ```
     
 
