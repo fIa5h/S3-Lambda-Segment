@@ -82,34 +82,20 @@ The deployment package is a .zip file containing your Lambda function code and d
 	`git clone https://github.com/RyanThomasMusser/S3-Lambda-Segment.git`
 
 -   Install all dependencies
-    
-    ```
-    yarn
-    ```
-    or if you are using npm
     ```
     npm install
     ```
 
--   Build the zip bundle that you will upload into AWS Lambda
-    ```
-    yarn build
-    ```
-    or if you are using npm
-    ```
-    npm run build
-    ```
-
 **To create the function**
 
--   Create a Lambda function with the  `create-function`  command.
+-   Upload the Lambda function using the following:
     
-    `S3-Lambda-Segment$ aws lambda create-function --function-name S3-Lambda-Segment --zip-file fileb://function.zip --handler index.handler --runtime nodejs8.10 --timeout 30 --memory-size 1024 --role arn:aws:iam::`**`<YOUR IAM ROLE ID>`**`:role/lambda-s3-role`
+    `$ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleId <THE IAM ROLE ID>`
     
 
-The preceding command specifies a 30-second timeout value as the function configuration. Depending on the size of objects you upload, you might need to increase the timeout value using the following AWS CLI command.
+The preceding command sets a 60-second timeout value as the function configuration. Depending on the size of objects you upload, you might need to increase the timeout value using the following AWS CLI command.
 
-``S3-Lambda-Segment$ aws lambda update-function-configuration --function-name S3-Lambda-Segment --timeout 60``
+``$ aws lambda update-function-configuration --function-name <YOUR LAMBDA NAME> --timeout 90``
 
 ### Test the Lambda Function
 
@@ -117,10 +103,9 @@ In this step, you invoke the Lambda function manually using sample Amazon S3 eve
 
 **To test the Lambda function**
 
-1.  This is where we'll use our previously created  `track_1.csv` file. You need to update the JSON by providing your  _`sourcebucket`_  name and `awsRegion`.
+1.  The command below use our previously created `track_1.csv` file that we've uploaded to S3 as our data source, simulate that `track_1.csv` was uploaded, and manually trigger our lambda function: 
     
-    ``S3-Lambda-Segment$ aws lambda invoke --function-name S3-Lambda-Segment --invocation-type Event --payload '{"Records":[ { "eventVersion":"2.0", "eventSource":"aws:s3", "awsRegion":"``**`<YOUR REGION, FOR EXAMPLE: us-east-1>`**``", "eventTime":"1970-01-01T00:00:00.000Z", "eventName":"ObjectCreated:Put", "userIdentity":{ "principalId":"AIDAJDPLRKLG7UEXAMPLE" }, "requestParameters":{ "sourceIPAddress":"127.0.0.1" }, "responseElements":{ "x-amz-request-id":"C3D13FE58DE4C810", "x-amz-id-2":"FMyUVURIY8/IgAtTv8xRjskZQpcIZ9KG4V5Wp6S7S/JRWeUWerMUE5JgHvANOjpD" }, "s3":{ "s3SchemaVersion":"1.0", "configurationId":"testConfigRule", "bucket":{ "name":"``**`<YOUR BUCKET NAME>"`**``, "ownerIdentity":{ "principalId":"A3NL1KOZZKExample" }, "arn":"arn:aws:s3:::``**`<YOUR BUCKET NAME>`**``" }, "object":{ "key":"track_1.csv", "eTag":"d41d8cd98f00b204e9800998ecf8427e", "versionId":"096fKKXTRTtl3on89fVO.nfljtsv6qko" } } } ] }'``  
-2.  Run the previous command to invoke the function. Note that the command requests asynchronous execution. You can optionally invoke it synchronously by specifying  `RequestResponse`  as the  `invocation-type`  parameter value.
+    ``$ node quickCommands.js --lambdaTest --lambdaName <YOUR LAMBDA NAME> --region <THE AWS REGION> --bucketName <YOUR S3 BUCKET NAME>``
     
 3.  Verify execution in your Cloudwatch logs.
 
@@ -140,18 +125,18 @@ In this step, you add the remaining configuration so that Amazon S3 can publish 
 
 **To add permissions to the function policy**
 
-1.  Run the following Lambda CLI  `add-permission`  command to grant Amazon S3 service principal (`s3.amazonaws.com`) permissions to perform the  `lambda:InvokeFunction`  action. Note that permission is granted to Amazon S3 to invoke the function only if the following conditions are met:
+1.  Run the following command to grant Amazon S3 service principal (`s3.amazonaws.com`) permissions to perform the  `lambda:InvokeFunction`  action. Note that permission is granted to Amazon S3 to invoke the function only if the following conditions are met:
     
     -   An object-created event is detected on a specific bucket.
         
     -   The bucket is owned by a specific AWS account. If a bucket owner deletes a bucket, some other AWS account can create a bucket with the same name. This condition ensures that only a specific AWS account can invoke your Lambda function.
         
     
-    ``S3-Lambda-Segment$ aws lambda add-permission --function-name S3-Lambda-Segment --principal s3.amazonaws.com --statement-id _some-unique-id_ --action "lambda:InvokeFunction" --source-arn arn:aws:s3:::``**`<YOUR BUCKET NAME>`**`` --source-account ``**`<BUCKET OWNER ACCOUNT ID>`**
+    ``$ node quickCommands.js --lambdaPermissionsSet --lambdaName <YOUR LAMBDA NAME> --bucketOwnerAccountId <AWS BUCKET OWNER ACCOUNT ID> --bucketName <YOUR S3 BUCKET NAME>``
     
-2.  Verify the function's access policy by running the AWS CLI  `get-policy`  command.
+2. Then, you can verify the function's access policy by running the following command:
     
-    ```S3-Lambda-Segment$ aws lambda get-policy --function-name S3-Lambda-Segment```
+    ```node quickCommands.js --lambdaPermissionsView --lambdaName <YOUR LAMBDA NAME>```
     
 Add notification configuration on the source bucket to request Amazon S3 to publish object-created events to Lambda.
 
