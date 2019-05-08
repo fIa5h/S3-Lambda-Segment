@@ -6,7 +6,7 @@ program
   .option('--lambdaTest', 'lambdaTest')
   .option('--lambdaPermissionsSet', 'lambdaPermissionsSet')
   .option('--lambdaPermissionsView', 'lambdaPermissionsView')
-  .option('--roleId [int]', 'roleId')
+  .option('--roleARN [string]', 'roleARN')
   .option('--lambdaName [string]', 'lambdaName')
   .option('--region [string]', 'region')
   .option('--bucketName [string]', 'bucketName')
@@ -16,10 +16,10 @@ program
 program.parse(process.argv);
 
 if (program.lambdaUpload){
-  if(!program.lambdaName || !program.roleId || !program.segmentWriteKey){
-    console.error('Error! Please include --lambdaName, --segmentWriteKey and --roleId');
+  if(!program.lambdaName || !program.roleARN || !program.segmentWriteKey){
+    console.error('Error! Please include --lambdaName, --segmentWriteKey and --roleARN');
   }else{
-    exec(`S3-Lambda-Segment$ aws lambda create-function --function-name `+program.lambdaName+` --zip-file fileb://function.zip --handler index.handler --runtime nodejs8.10 --timeout 60 --memory-size 1024 --role arn:aws:iam::`+program.roleId+`:role/lambda-s3-role `+`--environment Variables={write_key=`+program.segmentWriteKey+`}`, function (error, stdOut, stdErr) {
+    exec(`S3-Lambda-Segment$ aws lambda create-function --function-name `+program.lambdaName+` --zip-file fileb://function.zip --handler index.handler --runtime nodejs8.10 --timeout 60 --memory-size 1024 --role `+program.roleARN+` --environment Variables={write_key=`+program.segmentWriteKey+`}`, function (error, stdOut, stdErr) {
       if(error) console.log(error);
       if(stdOut) console.log(stdOut);
       if(stdErr) console.log(stdErr);
