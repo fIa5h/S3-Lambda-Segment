@@ -183,3 +183,89 @@ Now you can test the setup as follows:
 2.  Verify that the data was uploaded to Segment using the Segment debugging console.
     
 3.  View logs in the CloudWatch console.
+
+# Things to note
+## Timestamps
+This script will automatically transform all CSV timestamp columns, regardless of nesting, that have the names `createdAt` and `timestamp` to timestamp objects in preparation for Segment ingestion. If you have your timestamps named differently, please search `index.js` for "colParser" and add your column names there for automatic transformation. You will then have to re-zip the package using `zip -r function.zip .` and upload the newly created zip to Lambda.
+## CSV Format 
+Based on the method you want to execute, your CSV files should have a defined structure.  
+
+**Identify Structure**
+
+An `identify_XXXXX` csv file will have the following field names:
+
+1. userId - Required
+2. anonymousId - Optional
+3. traits.<name> - Optional
+4. context.ip - Optional
+5. context.device.id - Optional
+6. timestamp (Unix time) - Optional
+7. integrations.<integration> - Optional
+
+In the above structure, the `userId` is a must but the remaining aren’t. Traits would start the name `traits.<name>`.  Context fields will start the name `context.` followed by the canonical structure.  The same canonical structure will apply to `integrations` too.  
+
+
+**Page/Screen Structure**
+
+For eg: a `screen_XXXXX` or `page_YYYY` file will have the following field names:
+
+1. userId - Required
+2. name - Required
+3. anonymousId - Optional
+4. properties.<name> - Optional
+5. context.ip - Optional
+6. context.device.id - Optional
+7. timestamp (Unix time) - Optional
+8. integrations.<integration> - Optional
+	
+**Track Structure**
+
+For eg: a `track_XXXXX` file will have the following field names:
+
+1. userId - Required
+2. event - Required
+3. anonymousId - Optional
+4. properties.<name> - Optional
+5. context.ip - Optional
+6. context.device.id - Optional
+7. timestamp (Unix time) - Optional
+8. integrations.<integration> - Optional
+
+Structure for `track` or `page` is almost identical to `identify` with the exception for where traits will go.  In this case the `traits` will get nested under `context` just like `device` is.  
+
+**Nested structures**
+
+In each of the methods, there will may need to pass nested JSON to the tracking or objects api.  To support the concept of nested in CSVs, we will use the canonical naming convention to specify them.  For eg: `context.device.advertisingId` as a CSV column will eventually look like this in JSON:
+
+``
+    "context": { 
+      "device": {
+        "advertisingId": "like_i_am_going_to_give_that_away"
+      }
+    }
+ ``
+
+**Object Structure**
+
+There will be scenarios in which our tracking API will not be suitable for datasets that a customer would like to move to a warehouse connected to their Segment workspace.  This can be e-commerce product data, media content metadata, campaign performance etc.  
+
+To accomplish this we will need to rely on our Objects API which today is used in all our object cloud sources. There is library support for this api with Node and Go-lang.
+
+**Filename**
+
+CSV files that should be treated as Segment objects should start the filename with `object_<collection>_` where collection is the name of the object.  For eg:
+
+``
+    segment.set('rooms', '2561341', {
+      name: 'Charming Beach Room Facing Ocean',
+      location: 'Lihue, HI',
+      review_count: 47
+    });
+``
+
+In the above, the CSV filename would start with `object_rooms_` where rooms is the name of the collection in question.  
+
+CSV structure will look the following:
+
+
+1. id - Required
