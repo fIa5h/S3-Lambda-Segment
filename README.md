@@ -115,7 +115,7 @@ In this step, you invoke the Lambda function manually using sample Amazon S3 eve
     $ node quickCommands.js --lambdaTest --lambdaName <YOUR LAMBDA NAME> --region <THE AWS REGION> --bucketName <YOUR S3 BUCKET NAME>
     ```
     
-3.  Verify execution in your Cloudwatch logs.
+3.  Verify execution in your Cloudwatch logs or Segment debugger.
 
 ### Configure Amazon S3 to Publish Events
 
