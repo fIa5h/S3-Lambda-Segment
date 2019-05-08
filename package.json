@@ -13,11 +13,6 @@
   },
   "devDependencies": {},
   "scripts": {
-    "lambdaBuild": "zip -r function.zip .",
-    "lambdaUpload": "node commands.js --lambdaUpload",
-    "lambdaTest": "node commands.js --lambdaTest",
-    "lambdaPermissionsSet": "node commands.js --lambdaPermissionsSet",
-    "lambdaPermissionsView": "node commands.js --lambdaPermissionsView",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
