@@ -7,12 +7,17 @@
     "analytics-node": "^3.3.0",
     "async": "^2.6.2",
     "aws-sdk": "^2.451.0",
+    "commander": "^2.20.0",
     "csvtojson": "^2.0.8",
     "objects-node": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {
-    "build": "zip -r function.zip .",
+    "lambdaBuild": "zip -r function.zip .",
+    "lambdaUpload": "node commands.js --lambdaUpload",
+    "lambdaTest": "node commands.js --lambdaTest",
+    "lambdaPermissionsSet": "node commands.js --lambdaPermissionsSet",
+    "lambdaPermissionsView": "node commands.js --lambdaPermissionsView",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
