@@ -90,6 +90,9 @@ exports.handler = function(event, context, callback) {
                 // Then, we get and delete our objectId from the object we pass into Segment
                 var objectId = objectObject.id;
                 delete objectObject.id;
+                console.log("objectCollection: ",objectCollection);
+                console.log("objectId: ", objectId);
+                console.log("objectObject: ",objectObject);
                 objects.set(objectCollection, objectId, objectObject);
               });
             }else{
@@ -99,7 +102,8 @@ exports.handler = function(event, context, callback) {
 
             // Now we make sure that all of our queued actions are flushed before moving on
             if(srcFileName.startsWith('object_')){
-              objects.flush(function(err, batch){
+              var objectCollection = srcFileName.split("_")[1];
+              objects.flush(objectCollection, function(err, batch){
                 next(err,"Done");
               });
             }else{
