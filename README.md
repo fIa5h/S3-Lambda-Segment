@@ -21,7 +21,7 @@ The goal of this project is to make this process easier by providing an automate
 - A source bucket with a notification configuration that invokes the Lambda function.
 - --
 ### Prerequisites
-This tutorial assumes that you have some knowledge of basic Lambda operations and the Lambda console. If you haven't already, follow the instructions in  [Getting Started with AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/getting-started.html)  to create your first Lambda function.
+This tutorial assumes that you have some basic knowledge of S3, Lambda and aws cli. If you haven't already, follow the instructions in  [Getting Started with AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/getting-started.html) to create your first Lambda function. Also, if you're unfamiliar with aws cli, follow the instructions in [Setting up the AWS Command Line Interface](https://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html)
 
 To follow the procedures in this guide, you will need a command line terminal or shell to run commands. Commands are shown in listings preceded by a prompt symbol ($) and the name of the current directory, when appropriate.
 
@@ -32,7 +32,7 @@ Install NPM to manage the function's dependencies.
 ## Getting Started
 ### Create the Execution Role
 
-Create the  [execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html)  that gives your function permission to access AWS resources.
+Create the  [execution role](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html) that gives your function permission to access AWS resources.
 
 **To create an execution role**
 
@@ -85,7 +85,9 @@ The deployment package is a .zip file containing your Lambda function code and d
 
 -   Install dependencies
     ```
-    npm install
+    $ cd S3-Lambda-Segment
+    
+    S3-Lambda-Segment$ npm install
     ```
 
 **To create the function**
@@ -93,14 +95,14 @@ The deployment package is a .zip file containing your Lambda function code and d
 -   Upload the Lambda function using the following:
     
     ```
-    $ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleARN <THE IAM ROLE ARN, example: arn:aws:iam::262705970317:role/lambda-s3-role> --segmentWriteKey <YOUR SEGMENT WRITE KEY>
+    S3-Lambda-Segment$ node quickCommands.js --lambdaUpload --lambdaName <YOUR LAMBDA NAME> --roleARN <THE IAM ROLE ARN, example: arn:aws:iam::262705970317:role/lambda-s3-role> --segmentWriteKey <YOUR SEGMENT WRITE KEY>
     ```
     
 
 **Please note your Lambda function's name and region, we will need them later**. The preceding command sets a 60-second timeout value as the function configuration. Depending on the size of objects you upload, you might need to increase the timeout value using the following AWS CLI command.
 
 ```
-$ aws lambda update-function-configuration --function-name <YOUR LAMBDA NAME> --timeout 90
+S3-Lambda-Segment$ aws lambda update-function-configuration --function-name <YOUR LAMBDA NAME> --timeout 90
 ```
 
 ### Test the Lambda Function
@@ -112,7 +114,7 @@ In this step, you invoke the Lambda function manually using sample Amazon S3 eve
 1.  The command below use our previously created `track_1.csv` file that we've uploaded to S3 as our data source, simulate that `track_1.csv` was uploaded, and manually trigger our lambda function: 
     
     ```
-    $ node quickCommands.js --lambdaTest --lambdaName <YOUR LAMBDA NAME> --region <THE AWS REGION> --bucketName <YOUR S3 BUCKET NAME>
+    S3-Lambda-Segment$ node quickCommands.js --lambdaTest --lambdaName <YOUR LAMBDA NAME> --region <THE AWS REGION> --bucketName <YOUR S3 BUCKET NAME>
     ```
     
 3.  Verify execution in your Cloudwatch logs or Segment debugger.
@@ -137,17 +139,17 @@ In this step, you add the remaining configuration so that Amazon S3 can publish 
     
     -   An object-created event is detected on a specific bucket.
         
-    -   The bucket is owned by a specific AWS account. If a bucket owner deletes a bucket, some other AWS account can create a bucket with the same name. This condition ensures that only a specific AWS account can invoke your Lambda function.
+    -   The bucket is owned by a specific AWS account. If a bucket owner deletes a bucket, some other AWS account can create a bucket with the same name. This condition ensures that only a specific AWS account can invoke your Lambda function. You can learn [how to find your account id here](https://www.apn-portal.com/knowledgebase/articles/FAQ/Where-Can-I-Find-My-AWS-Account-ID).
         
     
     ```
-    $ node quickCommands.js --lambdaPermissionsSet --lambdaName <YOUR LAMBDA NAME> --bucketOwnerAccountId <AWS BUCKET OWNER ACCOUNT ID> --bucketName <YOUR S3 BUCKET NAME>
+    S3-Lambda-Segment$ node quickCommands.js --lambdaPermissionsSet --lambdaName <YOUR LAMBDA NAME> --bucketOwnerAccountId <AWS BUCKET OWNER ACCOUNT ID> --bucketName <YOUR S3 BUCKET NAME>
     ```
     
 2. Then, you can verify the function's access policy by running the following command:
     
     ```
-    node quickCommands.js --lambdaPermissionsView --lambdaName <YOUR LAMBDA NAME>
+    S3-Lambda-Segment$ node quickCommands.js --lambdaPermissionsView --lambdaName <YOUR LAMBDA NAME>
     ```
     
 Add notification configuration on the source bucket to request Amazon S3 to publish object-created events to Lambda.
